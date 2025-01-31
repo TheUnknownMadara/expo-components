@@ -36,3 +36,14 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# android/ directories
+android/**/build
+android/.DS_Store
+android/.idea
+android/.gradle
+android/local.properties
+android/*.iml
+android/*.hprof
+android/.cxx/
+android/*.jsbundle

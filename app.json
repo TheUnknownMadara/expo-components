@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expoapp",
-    "slug": "expoapp",
+    "name": "expo-components",
+    "slug": "exopo-components",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,6 +32,17 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/SpaceMono-Regular.ttf",
+            "./assets/fonts/SpaceMono-Bold.ttf",
+            "./assets/fonts/SpaceMono-BoldItalic.ttf",
+            "./assets/fonts/SpaceMono-Italic.ttf"
+          ]
         }
       ]
     ],
