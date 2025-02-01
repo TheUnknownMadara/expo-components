@@ -9,6 +9,20 @@ export const SIZES = {
       h1: 42,
       h2: 26,
       p: 20,
-    }
+    },
+  },
+  cards: {
+    radius: 16,
+    padding: 16,
+    border: 0.6,
+  },
+  icons: {
+    size: {
+      small: 16,
+      medium: 24,
+      large: 32,
+      xlarge: 48,
+      xxlarge: 64,
+    },
   },
 };

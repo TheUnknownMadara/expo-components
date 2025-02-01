@@ -9,6 +9,7 @@ const H2: React.FC<H2Props> = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
   return (
     <Text
+      selectable={true}
       accessibilityRole="text"
       style={[colorScheme === 'dark' ? styles.dark : styles.light, style]}
       {...props}

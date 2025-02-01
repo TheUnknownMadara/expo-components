@@ -9,6 +9,7 @@ const H1: React.FC<H1Props> = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
   return (
     <Text
+      selectable={true}
       accessibilityRole="header"
       style={[colorScheme === 'dark' ? styles.dark : styles.light, style]}
       {...props}
@@ -21,7 +22,7 @@ const H1: React.FC<H1Props> = ({ children, style, ...props }) => {
 const h1 = StyleSheet.create({
   h1: {
     fontSize: SIZES.text.fontSize.h1,
-    fontFamily: 'SpaceMono-Bold',
+    fontFamily: 'RobotoMono_700Bold',
     lineHeight: SIZES.text.lineHeight.h1,
   },
 });

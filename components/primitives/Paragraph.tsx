@@ -7,6 +7,7 @@ const Paragraph: React.FC<TextProps> = ({ children, style, ...props }) => {
   const colorScheme = useColorScheme();
   return (
     <Text
+      selectable={true}
       accessibilityRole="text"
       style={[colorScheme === 'dark' ? styles.dark : styles.light, style]}
       {...props}

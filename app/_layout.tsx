@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import useFontsLoader from '@/hooks/useFontsLoader';
 import { useColorScheme } from 'react-native';
+import { ToastProvider } from '@/contexts/toastContext';
 
 export default function RootLayout() {
   const { fontsLoaded, fontsError } = useFontsLoader();
@@ -10,6 +11,7 @@ export default function RootLayout() {
   }
 
   return (
+    <ToastProvider>
         <Stack
           screenOptions={{
             headerShown: false,
@@ -27,5 +29,6 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+    </ToastProvider>
   );
 }
