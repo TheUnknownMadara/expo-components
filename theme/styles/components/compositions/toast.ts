@@ -95,7 +95,7 @@ export function info(
         info: {
           borderRadius: SIZES.cards.radius,
           backgroundColor: COLORS.dark.backgroundGlassMorph,
-          borderColor: COLORS.dark.text,
+          borderColor: COLORS.dark.getText(),
           borderWidth: SIZES.cards.border,
           borderStyle: 'solid',
         },
@@ -105,7 +105,7 @@ export function info(
         info: {
           borderRadius: SIZES.cards.radius,
           backgroundColor: COLORS.light.backgroundGlassMorph,
-          borderColor: COLORS.light.text,
+          borderColor: COLORS.light.getText(),
           borderWidth: SIZES.cards.border,
           borderStyle: 'solid',
         },
@@ -115,7 +115,7 @@ export function info(
         info: {
           borderRadius: SIZES.cards.radius,
           backgroundColor: COLORS.dark.backgroundGlassMorph,
-          borderColor: COLORS.dark.text,
+          borderColor: COLORS.dark.getText(),
           borderWidth: SIZES.cards.border,
           borderStyle: 'solid',
         },
@@ -171,7 +171,7 @@ export const messageColor = (
         ? COLORS.dark.status.error
         : COLORS.light.status.error;
     default:
-      return theme === 'dark' ? COLORS.dark.text : COLORS.light.text;
+      return theme === 'dark' ? COLORS.dark.getText() : COLORS.light.getText();
   }
 };
 

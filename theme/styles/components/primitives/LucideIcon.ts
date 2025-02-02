@@ -7,19 +7,42 @@ export default function icon(theme: ColorSchemeName): MotiProps {
     case 'dark':
       return {
         animate: {
-          color: COLORS.dark.text,
+          color: COLORS.dark.getText(),
         },
       };
     case 'light':
       return {
         animate: {
-          color: COLORS.light.text,
+          color: COLORS.light.getText(),
         },
       };
     default:
       return {
         animate: {
-          color: COLORS.dark.text,
+          color: COLORS.dark.getText(),
+        },
+      };
+  }
+}
+
+export function ButtonIcon(theme: ColorSchemeName): MotiProps {
+  switch (theme) {
+    case 'dark':
+      return {
+        animate: {
+          color: COLORS.dark.background,
+        },
+      };
+    case 'light':
+      return {
+        animate: {
+          color: COLORS.light.background,
+        },
+      };
+    default:
+      return {
+        animate: {
+          color: COLORS.dark.background,
         },
       };
   }

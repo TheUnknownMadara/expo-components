@@ -1,39 +1,21 @@
 import React from 'react';
-import { Text, StyleSheet, TextProps, useColorScheme } from 'react-native';
-import { COLORS } from '@/theme/colors';
-import { SIZES } from '@/theme/sizes';
+import { Text, TextProps, useColorScheme } from 'react-native';
+import { ParagraphStyle } from '@/theme/styles/components/primitives/Paragraph';
 
-const Paragraph: React.FC<TextProps> = ({ children, style, ...props }) => {
+export type ParagraphProps = TextProps;
+
+const Paragraph: React.FC<TextProps> = ({ children, ...props }) => {
   const colorScheme = useColorScheme();
   return (
     <Text
       selectable={true}
       accessibilityRole="text"
-      style={[colorScheme === 'dark' ? styles.dark : styles.light, style]}
       {...props}
+      style={ParagraphStyle(colorScheme, props.style)}
     >
       {children}
     </Text>
   );
 };
-
-const p = StyleSheet.create({
-  p: {
-    fontSize: SIZES.text.fontSize.p,
-    fontFamily: 'SpaceMono-Regular',
-    lineHeight: SIZES.text.lineHeight.p,
-  },
-});
-
-const styles = StyleSheet.create({
-  dark: {
-    color: COLORS.dark.text,
-    ...p.p,
-  },
-  light: {
-    color: COLORS.light.text,
-    ...p.p,
-  }
-});
 
 export default Paragraph;

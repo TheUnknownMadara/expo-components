@@ -13,6 +13,7 @@ type IconProp = {
 
 export default function LucideIcon({ size = 16, name, ...rest }: IconProp) {
   const theme = useColorScheme();
+  // eslint-disable-next-line import/namespace
   const IconComponent = motifySvg(icons[name] as any)();
   return <IconComponent size={size} {...icon(theme)} {...rest} />;
 }
