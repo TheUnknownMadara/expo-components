@@ -15,6 +15,7 @@ export function ButtonContainer(
       padding: SIZES.buttons.padding,
       gap: SIZES.buttons.gap,
       borderRadius: SIZES.buttons.radius,
+      borderWidth: SIZES.cards.border,
     },
   }
 
@@ -24,6 +25,7 @@ export function ButtonContainer(
         container: {
           ..._default.container,
           backgroundColor: COLORS.dark.buttons.getBackground(),
+          boxShadow: `0 8px 32px 0 ${COLORS.dark.surface.unresolved.getSurface30()}`,
           ...style,
         },
       }).container;
@@ -32,6 +34,7 @@ export function ButtonContainer(
         container: {
           ..._default.container,
           backgroundColor: COLORS.light.buttons.getBackground(),
+          boxShadow: `0 8px 32px 0 ${COLORS.light.surface.unresolved.getSurface30()}`,
           ...style,
         },
       }).container;

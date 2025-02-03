@@ -71,17 +71,17 @@ export default function Components() {
           width: '100%',
           backgroundColor:
             theme === 'dark'
-              ? COLORS.dark.surface.surface12
-              : COLORS.light.surface.surface12,
+              ? COLORS.dark.surface.unresolved.getSurface12()
+              : COLORS.light.surface.unresolved.getSurface12(),
           borderColor:
             theme === 'dark'
-              ? COLORS.dark.surface.surface50
-              : COLORS.light.surface.surface50,
-          boxShadow: theme === 'dark' ? `0 8px 32px 0 ${COLORS.dark.surface.surface8}` : `0 8px 32px 0 ${COLORS.light.surface.surface8}`,
+              ? COLORS.dark.surface.unresolved.getSurface50()
+              : COLORS.light.surface.unresolved.getSurface50(),
+          boxShadow: theme === 'dark' ? `0 8px 32px 0 ${COLORS.dark.surface.unresolved.getSurface8()}` : `0 8px 32px 0 ${COLORS.light.surface.unresolved.getSurface8()}`,
           borderWidth: SIZES.cards.border,
           padding: SIZES.screens.paddingleft,
           borderRadius: SIZES.cards.radius,
-          shadowColor: COLORS.light.surface.surface16,
+          shadowColor: COLORS.light.surface.unresolved.getSurface8(),
           minHeight: 100,
         }}
       >

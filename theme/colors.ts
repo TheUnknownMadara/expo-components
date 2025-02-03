@@ -2,12 +2,110 @@
 // There's no hardcoded colors in any other file, and you should keep it that way.
 // The colors and shades are calculated in real time based on the interaction of the colors
 // described here. also, when we want to use this same interactions, but in components
-// that cant overlap, we use this file to calculate the colors.
+// that cant overlap, we use this file to calculate the colors. Because of the functions
+// being pure, we can benefit from memoization.
+
+type MemoizableFunction = (...args: any[]) => any;
+
+function memoize<T extends MemoizableFunction>(fn: T): T {
+  const cache = new Map<string, ReturnType<T>>();
+  
+  return ((...args: Parameters<T>) => {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key)!;
+    
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  }) as T;
+}
 
 export type RGBA = { r: number; g: number; b: number; a: number };
 type RGB = { r: number; g: number; b: number };
 
-export function parseRGBAString(rgbaString: string): RGBA {
+type ThemeConfig = {
+  foreground: string;
+  background: string;
+  primary: string;
+};
+
+const SURFACE_OPACITIES = [5, 7, 8, 11, 12, 14, 15, 16, 20, 30, 40, 50] as const;
+
+function createSurface(foreground: string, background: string) {
+  const createUnresolvedSurface = (color: string) => ({
+    getColor: () => color,
+    ...Object.fromEntries(
+      SURFACE_OPACITIES.map(opacity => [
+        `getSurface${opacity}`,
+        () => convertRGBToRGBA(color, opacity)
+      ])
+    ) as { [K in `getSurface${typeof SURFACE_OPACITIES[number]}`]: () => string }
+  });
+
+  const unresolved = createUnresolvedSurface(foreground);
+
+  const createAttenuatedSurface = (opacity: typeof SURFACE_OPACITIES[number]) => 
+    attenuateRGBA(unresolved[`getSurface${opacity}`](), background);
+
+  const surface = Object.fromEntries(
+    SURFACE_OPACITIES.map(opacity => [
+      `surface${opacity}`,
+      { get: () => createAttenuatedSurface(opacity) }
+    ])
+  );
+
+  return { unresolved, ...surface };
+}
+
+function createTheme(config: ThemeConfig) {
+  const getText = memoize(() => config.foreground);
+  
+  return {
+    ...config,
+    getText,
+    get text() { return getText() }, // Property accessor using memoized method
+    
+    status: {
+      success: '#28a745',
+      error: '#dc3545',
+      warning: '#ffc107',
+      epic: '#6f42c1',
+    },
+    
+    buttons: {
+      getBackground: memoize(() => config.foreground),
+      getText: memoize(() => config.background),
+      getIcon: memoize(() => config.background),
+    },
+    
+    surface: createSurface(config.foreground, config.background)
+  };
+}
+
+const convertRGBToRGBA = memoize((
+  rgbString: string,
+  opacity: number
+): string => {
+  const rgb = parseRGBString(rgbString);
+  const clampedOpacity = Math.min(100, Math.max(0, opacity));
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${clampedOpacity / 100})`;
+});
+
+export const COLORS = {
+  dark: createTheme({
+    background: 'rgb(7, 10, 13)',
+    foreground: 'rgb(242, 245, 248)',
+    primary: '#007AFF'
+  }),
+  light: createTheme({
+    background: 'rgb(242, 245, 248)',
+    foreground: 'rgb(7, 10, 13)',
+    primary: '#007AFF'
+  })
+};
+
+
+export const parseRGBAString = memoize((rgbaString: string): RGBA => {
   const match = rgbaString.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
   if (!match) throw new Error('Invalid RGBA format');
   return {
@@ -16,9 +114,9 @@ export function parseRGBAString(rgbaString: string): RGBA {
     b: parseInt(match[3]),
     a: parseFloat(match[4]),
   };
-}
+});
 
-export function parseRGBString(rgbString: string): RGB {
+export const parseRGBString = memoize((rgbString: string): RGB => {
   const match = rgbString.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
   if (!match) throw new Error('Invalid RGB format');
   return {
@@ -26,252 +124,19 @@ export function parseRGBString(rgbString: string): RGB {
     g: parseInt(match[2]),
     b: parseInt(match[3]),
   };
-}
+});
 
-export function attenuateRGBA(
+export const attenuateRGBA = memoize((
   rgbaString: string,
   backgroundRGBString: string
-): string {
-  const rgba: RGBA = parseRGBAString(rgbaString);
-  const backgroundRGB: RGB = parseRGBString(backgroundRGBString);
+): string => {
+  const rgba = parseRGBAString(rgbaString);
+  const backgroundRGB = parseRGBString(backgroundRGBString);
   const { r: fr, g: fg, b: fb, a: fa } = rgba;
   const { r: br, g: bg, b: bb } = backgroundRGB;
   const r = Math.round(fr * fa + br * (1 - fa));
   const g = Math.round(fg * fa + bg * (1 - fa));
   const b = Math.round(fb * fa + bb * (1 - fa));
   return `rgb(${r},${g},${b})`;
-}
+});
 
-function convertRGBToRGBA(rgbString: string, opacity: number): string {
-  const rgb = parseRGBString(rgbString);
-  if (opacity < 0 || opacity > 100)
-    return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`;
-  const alpha = opacity / 100;
-  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-}
-
-export const COLORS = {
-  dark: {
-    background: 'rgb(7, 10, 13)',
-    foreground: 'rgb(242, 245, 248)',
-    getText() {
-      return COLORS.dark.foreground;
-    },
-    primary: '#007AFF',
-    status: {
-      success: '#28a745',
-      error: '#dc3545',
-      warning: '#ffc107',
-      epic: '#6f42c1',
-    },
-    buttons: {
-      getBackground() {
-        return COLORS.dark.foreground;
-      },
-      getText() {
-        return COLORS.dark.background;
-      },
-    },
-    surface: {
-      unresolved: {
-        getColor() {
-          return COLORS.dark.foreground;
-        },
-        getSurface5() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 5);
-        },
-        getSurface7() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 7);
-        },
-        getSurface8() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 8);
-        },
-        getSurface11() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 11);
-        },
-        getSurface12() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 12);
-        },
-        getSurface14() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 14);
-        },
-        getSurface15() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 15);
-        },
-        getSurface16() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 16);
-        },
-        getSurface50() {
-          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 16);
-        },
-      },
-      get surface5() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface5(),
-          COLORS.dark.background
-        );
-      },
-      get surface7() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface7(),
-          COLORS.dark.background
-        );
-      },
-      get surface8() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface8(),
-          COLORS.dark.background
-        );
-      },
-      get surface11() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface11(),
-          COLORS.dark.background
-        );
-      },
-      get surface12() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface12(),
-          COLORS.dark.background
-        );
-      },
-      get surface14() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface14(),
-          COLORS.dark.background
-        );
-      },
-      get surface15() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface15(),
-          COLORS.dark.background
-        );
-      },
-      get surface16() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface16(),
-          COLORS.dark.background
-        );
-      },
-      get surface50() {
-        return attenuateRGBA(
-          COLORS.dark.surface.unresolved.getSurface50(),
-          COLORS.dark.background
-        );
-      }
-    },
-  },
-  light: {
-    getText() {
-      return COLORS.light.foreground;
-    },
-    background: 'rgb(242, 245, 248)',
-    foreground: 'rgb(7, 10, 13)',
-    primary: '#007AFF',
-    status: {
-      success: '#28a745',
-      error: '#dc3545',
-      warning: '#ffc107',
-      epic: '#6f42c1',
-    },
-    buttons: {
-      getBackground() {
-        return COLORS.light.foreground;
-      },
-      getText() {
-        return COLORS.light.background;
-      },
-      getIcon() {
-        return COLORS.light.background;
-      },
-    },
-    surface: {
-      unresolved: {
-        getColor() {
-          return COLORS.light.foreground;
-        },
-        getSurface5() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 5);
-        },
-        getSurface7() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 7);
-        },
-        getSurface8() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 8);
-        },
-        getSurface11() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 11);
-        },
-        getSurface12() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 12);
-        },
-        getSurface14() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 14);
-        },
-        getSurface15() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 15);
-        },
-        getSurface16() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 16);
-        },
-        getSurface50() {
-          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 50);
-        }
-      },
-      get surface5() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface5(),
-          COLORS.light.background
-        );
-      },
-      get surface7() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface7(),
-          COLORS.light.background
-        );
-      },
-      get surface8() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface8(),
-          COLORS.light.background
-        );
-      },
-      get surface11() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface11(),
-          COLORS.light.background
-        );
-      },
-      get surface12() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface12(),
-          COLORS.light.background
-        );
-      },
-      get surface14() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface14(),
-          COLORS.light.background
-        );
-      },
-      get surface15() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface15(),
-          COLORS.light.background
-        );
-      },
-      get surface16() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface16(),
-          COLORS.light.background
-        );
-      },
-      get surface50() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.getSurface50(),
-          COLORS.light.background
-        );
-      }
-    },
-  },
-};
