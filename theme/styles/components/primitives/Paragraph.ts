@@ -9,7 +9,7 @@ export function ParagraphStyle(
 ) {
   const _default : StyleProp<any> = {
     text: {
-      fontFamily: 'SpaceMono-Regular',
+      fontFamily: 'CourierPrime_400Regular',
       fontSize: SIZES.text.fontSize.p,
       lineHeight: SIZES.text.lineHeight.p,
     },

@@ -39,3 +39,6 @@ app-example
 
 # android/ directories
 android/
+
+# ios/ directories
+ios/

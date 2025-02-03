@@ -1,5 +1,5 @@
 // This file is intended to give as the maximum control of how whe control lights.
-// There's no harded coded colors in any other file, and you should keep it that way.
+// There's no hardcoded colors in any other file, and you should keep it that way.
 // The colors and shades are calculated in real time based on the interaction of the colors
 // described here. also, when we want to use this same interactions, but in components
 // that cant overlap, we use this file to calculate the colors.
@@ -44,7 +44,7 @@ export function attenuateRGBA(
 
 function convertRGBToRGBA(rgbString: string, opacity: number): string {
   const rgb = parseRGBString(rgbString);
-  if (opacity < 1 || opacity > 100)
+  if (opacity < 0 || opacity > 100)
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`;
   const alpha = opacity / 100;
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
@@ -52,8 +52,8 @@ function convertRGBToRGBA(rgbString: string, opacity: number): string {
 
 export const COLORS = {
   dark: {
-    background: 'rgb(43, 18, 37)',
-    foreground: 'rgb(245, 204, 232)',
+    background: 'rgb(7, 10, 13)',
+    foreground: 'rgb(242, 245, 248)',
     getText() {
       return COLORS.dark.foreground;
     },
@@ -99,6 +99,9 @@ export const COLORS = {
           return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 15);
         },
         getSurface16() {
+          return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 16);
+        },
+        getSurface50() {
           return convertRGBToRGBA(COLORS.dark.surface.unresolved.getColor(), 16);
         },
       },
@@ -150,14 +153,20 @@ export const COLORS = {
           COLORS.dark.background
         );
       },
+      get surface50() {
+        return attenuateRGBA(
+          COLORS.dark.surface.unresolved.getSurface50(),
+          COLORS.dark.background
+        );
+      }
     },
   },
   light: {
     getText() {
       return COLORS.light.foreground;
     },
-    background: 'rgb(245, 204, 232)',
-    foreground: 'rgb(43, 18, 37)',
+    background: 'rgb(242, 245, 248)',
+    foreground: 'rgb(7, 10, 13)',
     primary: '#007AFF',
     status: {
       success: '#28a745',
@@ -178,92 +187,91 @@ export const COLORS = {
     },
     surface: {
       unresolved: {
-        color: 'rgb(43, 18, 37)',
-        surface5: 'rgba(43, 18, 37, 0.05)',
-        surface7: 'rgba(43, 18, 37, 0.07)',
-        surface8: 'rgba(43, 18, 37, 0.08)',
-        surface9: 'rgba(43, 18, 37, 0.09)',
-        surface11: 'rgba(43, 18, 37, 0.11)',
-        surface12: 'rgba(43, 18, 37, 0.12)',
-        surface14: 'rgba(43, 18, 37, 0.14)',
-        surface15: 'rgba(43, 18, 37, 0.15)',
-        surface16: 'rgba(43, 18, 37, 0.16)',
-        surface32: 'rgba(43, 18, 37, 0.32)',
-        surface50: 'rgba(43, 18, 37, 0.5)',
-        surface80: 'rgba(43, 18, 37, 0.8)',
+        getColor() {
+          return COLORS.light.foreground;
+        },
+        getSurface5() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 5);
+        },
+        getSurface7() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 7);
+        },
+        getSurface8() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 8);
+        },
+        getSurface11() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 11);
+        },
+        getSurface12() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 12);
+        },
+        getSurface14() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 14);
+        },
+        getSurface15() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 15);
+        },
+        getSurface16() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 16);
+        },
+        getSurface50() {
+          return convertRGBToRGBA(COLORS.light.surface.unresolved.getColor(), 50);
+        }
       },
       get surface5() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface5,
+          COLORS.light.surface.unresolved.getSurface5(),
           COLORS.light.background
         );
       },
       get surface7() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface7,
+          COLORS.light.surface.unresolved.getSurface7(),
           COLORS.light.background
         );
       },
       get surface8() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface8,
-          COLORS.light.background
-        );
-      },
-      get surface9() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface9,
+          COLORS.light.surface.unresolved.getSurface8(),
           COLORS.light.background
         );
       },
       get surface11() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface11,
+          COLORS.light.surface.unresolved.getSurface11(),
           COLORS.light.background
         );
       },
       get surface12() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface12,
+          COLORS.light.surface.unresolved.getSurface12(),
           COLORS.light.background
         );
       },
       get surface14() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface14,
+          COLORS.light.surface.unresolved.getSurface14(),
           COLORS.light.background
         );
       },
       get surface15() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface15,
+          COLORS.light.surface.unresolved.getSurface15(),
           COLORS.light.background
         );
       },
       get surface16() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface16,
-          COLORS.light.background
-        );
-      },
-      get surface32() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface32,
+          COLORS.light.surface.unresolved.getSurface16(),
           COLORS.light.background
         );
       },
       get surface50() {
         return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface50,
+          COLORS.light.surface.unresolved.getSurface50(),
           COLORS.light.background
         );
-      },
-      get surface80() {
-        return attenuateRGBA(
-          COLORS.light.surface.unresolved.surface80,
-          COLORS.light.background
-        );
-      },
+      }
     },
   },
 };

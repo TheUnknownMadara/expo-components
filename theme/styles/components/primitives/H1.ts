@@ -10,7 +10,7 @@ export function H1Style(
   const _default : StyleProp<any> = {
     h1: {
       fontSize: SIZES.text.fontSize.h1,
-      fontFamily: 'RobotoMono_700Bold',
+      fontFamily: 'Metropolis-Black',
       lineHeight: SIZES.text.lineHeight.h1,
     },
   }

@@ -15,11 +15,38 @@ import {
   RobotoMono_700Bold_Italic,
 } from '@expo-google-fonts/roboto-mono';
 
+import {
+  CourierPrime_400Regular,
+  CourierPrime_400Regular_Italic,
+  CourierPrime_700Bold,
+  CourierPrime_700Bold_Italic,
+} from '@expo-google-fonts/courier-prime';
+
 export const FONTS = {
   'SpaceMono-Regular': require('@/assets/fonts/SpaceMono-Regular.ttf'),
   'SpaceMono-Bold': require('@/assets/fonts/SpaceMono-Bold.ttf'),
   'SpaceMono-Italic': require('@/assets/fonts/SpaceMono-Italic.ttf'),
   'SpaceMono-BoldItalic': require('@/assets/fonts/SpaceMono-BoldItalic.ttf'),
+
+  // Metropolis
+  'Metropolis-Black': require('@/assets/fonts/Metropolis-Black.ttf'),
+  'Metropolis-BlackItalic': require('@/assets/fonts/Metropolis-BlackItalic.ttf'),
+  'Metropolis-Bold': require('@/assets/fonts/Metropolis-Bold.ttf'),
+  'Metropolis-BoldItalic': require('@/assets/fonts/Metropolis-BoldItalic.ttf'),
+  'Metropolis-ExtraBold': require('@/assets/fonts/Metropolis-ExtraBold.ttf'),
+  'Metropolis-ExtraBoldItalic': require('@/assets/fonts/Metropolis-ExtraBoldItalic.ttf'),
+  'Metropolis-ExtraLight': require('@/assets/fonts/Metropolis-ExtraLight.ttf'),
+  'Metropolis-ExtraLightItalic': require('@/assets/fonts/Metropolis-ExtraLightItalic.ttf'),
+  'Metropolis-Light': require('@/assets/fonts/Metropolis-Light.ttf'),
+  'Metropolis-LightItalic': require('@/assets/fonts/Metropolis-LightItalic.ttf'),
+  'Metropolis-Medium': require('@/assets/fonts/Metropolis-Medium.ttf'),
+  'Metropolis-MediumItalic': require('@/assets/fonts/Metropolis-MediumItalic.ttf'),
+  'Metropolis-Regular': require('@/assets/fonts/Metropolis-Regular.ttf'),
+  'Metropolis-RegularItalic': require('@/assets/fonts/Metropolis-RegularItalic.ttf'),
+  'Metropolis-SemiBold': require('@/assets/fonts/Metropolis-SemiBold.ttf'),
+  'Metropolis-SemiBoldItalic': require('@/assets/fonts/Metropolis-SemiBoldItalic.ttf'),
+  'Metropolis-Thin': require('@/assets/fonts/Metropolis-Thin.ttf'),
+  'Metropolis-ThinItalic': require('@/assets/fonts/Metropolis-ThinItalic.ttf'),
 };
 
 export const GOOGLE_FONTS = {
@@ -37,4 +64,8 @@ export const GOOGLE_FONTS = {
   RobotoMono_500Medium_Italic,
   RobotoMono_600SemiBold_Italic,
   RobotoMono_700Bold_Italic,
+  CourierPrime_400Regular,
+  CourierPrime_400Regular_Italic,
+  CourierPrime_700Bold,
+  CourierPrime_700Bold_Italic,
 };
