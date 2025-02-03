@@ -1,44 +1,21 @@
-import { ColorSchemeName, StyleProp, StyleSheet } from "react-native";
+import { StyleProp, StyleSheet } from "react-native";
 import { COLORS } from "@/theme/colors";
 import { SIZES } from "@/theme/sizes";
-
+import { ThemeContext } from "../../../../hooks/useThemesStore"; 
 
 export function H1Style(
-  theme: ColorSchemeName,
-  style : StyleProp<any> = {}
+  theme: ThemeContext,
+  style: StyleProp<any> = {}
 ) {
-  const _default : StyleProp<any> = {
+  const colors = COLORS[theme.scheme][theme.mode];
+  
+  return StyleSheet.create({
     h1: {
       fontSize: SIZES.text.fontSize.h1,
       fontFamily: 'Metropolis-Black',
       lineHeight: SIZES.text.lineHeight.h1,
+      color: colors.getText(),
+      ...style,
     },
-  }
-
-  switch (theme) {
-    case 'dark':
-      return StyleSheet.create({
-        h1: {
-          ..._default.h1,
-          color: COLORS.dark.getText(),
-          ...style,
-        },
-      }).h1;
-    case 'light':
-      return StyleSheet.create({
-        h1: {
-          ..._default.h1,
-          color: COLORS.light.getText(),
-          ...style,
-        },
-      }).h1;
-    default:
-      return StyleSheet.create({
-        h1: {
-          ..._default.h1,
-          color: COLORS.dark.getText(),
-          ...style,
-        },
-      }).h1;
-  }
+  }).h1;
 }

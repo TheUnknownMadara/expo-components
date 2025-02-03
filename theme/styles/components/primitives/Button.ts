@@ -1,11 +1,13 @@
-import { ColorSchemeName, StyleProp, StyleSheet } from "react-native";
 import { COLORS } from "@/theme/colors";
 import { SIZES } from "../../../sizes";
+import { ThemeContext } from "../../../../hooks/useThemesStore";
+import { StyleProp, StyleSheet } from "react-native";
 
 export function ButtonContainer(
-  theme: ColorSchemeName,
-  style : StyleProp<any> = {}
+  theme: ThemeContext,
+  style: StyleProp<any> = {}
 ) {
+  const colors = COLORS[theme.scheme][theme.mode];
   const _default : StyleProp<any> = {
     container: {
       display: 'flex',
@@ -16,73 +18,37 @@ export function ButtonContainer(
       gap: SIZES.buttons.gap,
       borderRadius: SIZES.buttons.radius,
       borderWidth: SIZES.cards.border,
+      boxShadow: `0 8px 32px 0 ${colors.surface.unresolved.getSurface30()}`,
+      width: 'auto',
     },
   }
 
-  switch (theme) {
-    case 'dark':
-      return StyleSheet.create({
-        container: {
-          ..._default.container,
-          backgroundColor: COLORS.dark.buttons.getBackground(),
-          boxShadow: `0 8px 32px 0 ${COLORS.dark.surface.unresolved.getSurface30()}`,
-          ...style,
-        },
-      }).container;
-    case 'light':
-      return StyleSheet.create({
-        container: {
-          ..._default.container,
-          backgroundColor: COLORS.light.buttons.getBackground(),
-          boxShadow: `0 8px 32px 0 ${COLORS.light.surface.unresolved.getSurface30()}`,
-          ...style,
-        },
-      }).container;
-    default:
-      return StyleSheet.create({
-        container: {
-          ..._default.container,
-          backgroundColor: COLORS.dark.buttons.getBackground(),
-          ...style,
-        },
-      }).container;
-  }
+  return StyleSheet.create({
+    container: {
+      ..._default.container,
+      backgroundColor: colors.surface.unresolved.getSurface50(),
+      borderColor: colors.surface.unresolved.getSurface50(),
+      ...style,
+    },
+  }).container;
 }
 
 export function ButtonText(
-  theme: ColorSchemeName,
-  style : StyleProp<any> = {}
+  theme: ThemeContext,
+  style: StyleProp<any> = {}
 ) {
+  const colors = COLORS[theme.scheme][theme.mode];
+  
   const _default : StyleProp<any> = {
     text: {
       fontFamily: 'SpaceMono-Regular',
     },
   }
-
-  switch (theme) {
-    case 'dark':
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.dark.buttons.getText(),
-          ...style,
-        },
-      }).text;
-    case 'light':
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.light.buttons.getText(),
-          ...style,
-        },
-      }).text;
-    default:
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.dark.buttons.getText(),
-          ...style,
-        },
-      }).text;
-  }
+  return StyleSheet.create({
+    text: {
+      ..._default.text,
+      color: colors.getText(),
+      ...style,
+    },
+  }).text;
 }

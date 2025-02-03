@@ -12,7 +12,6 @@ export default function Layout() {
     >
       <Tabs.Screen name="index" />
       <Tabs.Screen name="components" />
-      <Tabs.Screen name="settings" />
     </Tabs>
   );
 }

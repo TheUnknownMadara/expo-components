@@ -8,7 +8,7 @@ const ToastContext = createContext<ToastContextType | null>(null)
 
 const TOAST_HEIGHT = 60
 const MARGIN = 8
-const {height, width} = Dimensions.get('window')
+const {height} = Dimensions.get('window')
 
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<ToastQueueItem[]>([])
@@ -22,7 +22,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
       location
     }
 
-    if (toasts.length >= 2 || toasts.filter(toast => toast.location != newToast.location).length > 0) {
+    if (toasts.length >= 2 || toasts.filter(toast => toast.location !== newToast.location).length > 0) {
       setToasts(prev => prev.filter(toast => toast.location === newToast.location).slice(1))
     }
 

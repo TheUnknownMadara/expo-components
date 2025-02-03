@@ -2,15 +2,21 @@ import AppScreen from '@/components/compositions/AppScreen';
 import { Header } from '../../components/compositions/Header';
 import LucideIcon from '../../components/primitives/LucideIcon';
 import { SIZES } from '../../theme/sizes';
-import { Pressable, useColorScheme } from 'react-native';
+import { Pressable } from 'react-native';
 import { COLORS } from '../../theme/colors';
 import { Link } from 'expo-router';
 import { View } from 'moti';
 import Paragraph from '../../components/primitives/Paragraph';
 import H2 from '../../components/primitives/H2';
+import { useThemeStore } from '../../hooks/useThemesStore';
+import { ThemeSelector } from '../../components/compositions/ThemeSelector';
+
 
 export default function Components() {
-  const theme = useColorScheme();
+  const { scheme, mode } = useThemeStore();
+
+  const colors = COLORS[scheme][mode];
+
   return (
     <AppScreen
       style={{
@@ -21,20 +27,18 @@ export default function Components() {
     >
       <Header.Root
         style={{
-          backgroundColor:
-            theme === 'dark' ? COLORS.light.background : COLORS.dark.background,
+          backgroundColor: colors.foreground,
           paddingLeft: SIZES.screens.paddingleft - 3,
           borderRadius: SIZES.cards.radius,
           justifyContent: 'center',
+          boxShadow: `0 8px 32px 0 ${colors.surface.unresolved.getSurface16()}`,
+          borderWidth: SIZES.cards.border,
         }}
       >
         <Header.LeftAction>
           <Pressable
             style={{
-              backgroundColor:
-                theme === 'dark'
-                  ? COLORS.dark.background
-                  : COLORS.light.background,
+              backgroundColor: colors.background,
               borderRadius: SIZES.cards.radius / 2,
               padding: 3,
             }}
@@ -49,10 +53,7 @@ export default function Components() {
             title="Components"
             selectable={false}
             style={{
-              color:
-                theme === 'dark'
-                  ? COLORS.light.getText()
-                  : COLORS.dark.getText(),
+              color: colors.background,
               marginRight:
                 SIZES.icons.size.medium +
                 SIZES.screens.paddingleft +
@@ -69,19 +70,13 @@ export default function Components() {
         style={{
           display: 'flex',
           width: '100%',
-          backgroundColor:
-            theme === 'dark'
-              ? COLORS.dark.surface.unresolved.getSurface12()
-              : COLORS.light.surface.unresolved.getSurface12(),
-          borderColor:
-            theme === 'dark'
-              ? COLORS.dark.surface.unresolved.getSurface50()
-              : COLORS.light.surface.unresolved.getSurface50(),
-          boxShadow: theme === 'dark' ? `0 8px 32px 0 ${COLORS.dark.surface.unresolved.getSurface8()}` : `0 8px 32px 0 ${COLORS.light.surface.unresolved.getSurface8()}`,
+          backgroundColor: colors.surface.unresolved.getSurface12(),
+          borderColor: colors.surface.unresolved.getSurface50(),
+          boxShadow: `0 8px 32px 0 ${colors.surface.unresolved.getSurface8()}`,
           borderWidth: SIZES.cards.border,
           padding: SIZES.screens.paddingleft,
           borderRadius: SIZES.cards.radius,
-          shadowColor: COLORS.light.surface.unresolved.getSurface8(),
+          shadowColor: colors.surface.unresolved.getSurface8(),
           minHeight: 100,
         }}
       >
@@ -103,6 +98,7 @@ export default function Components() {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod.
         </Paragraph>
       </Pressable>
+      <ThemeSelector />
     </AppScreen>
   );
 }

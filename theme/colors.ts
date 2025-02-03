@@ -91,19 +91,6 @@ const convertRGBToRGBA = memoize((
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${clampedOpacity / 100})`;
 });
 
-export const COLORS = {
-  dark: createTheme({
-    background: 'rgb(7, 10, 13)',
-    foreground: 'rgb(242, 245, 248)',
-    primary: '#007AFF'
-  }),
-  light: createTheme({
-    background: 'rgb(242, 245, 248)',
-    foreground: 'rgb(7, 10, 13)',
-    primary: '#007AFF'
-  })
-};
-
 
 export const parseRGBAString = memoize((rgbaString: string): RGBA => {
   const match = rgbaString.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
@@ -140,3 +127,58 @@ export const attenuateRGBA = memoize((
   return `rgb(${r},${g},${b})`;
 });
 
+type ColorPair = {
+  light: string;
+  dark: string;
+  primary: string;
+};
+
+export const COLOR_PAIRS = {
+  default: {
+    light: 'rgb(242, 245, 248)',
+    dark: 'rgb(7, 10, 13)',
+    primary: '#007AFF'
+  },
+  greenValley: {
+    light: 'rgb(220, 245, 220)',
+    dark: 'rgb(12, 35, 20)',
+    primary: '#2ECC40'
+  },
+  blueSea: {
+    light: 'rgb(200, 225, 255)',
+    dark: 'rgb(10, 25, 50)',
+    primary: '#0074D9'
+  },
+  CherryOre: {
+    light: 'rgb(255, 215, 220)',
+    dark: 'rgb(40, 10, 15)',
+    primary: '#FF3860'
+  }
+} as const;
+
+const createThemeVariants = memoize((pair: ColorPair) => {
+  return {
+    dark: createTheme({
+      background: pair.dark,
+      foreground: pair.light,
+      primary: pair.primary
+    }),
+    light: createTheme({
+      background: pair.light,
+      foreground: pair.dark,
+      primary: pair.primary
+    })
+  };
+});
+
+export const COLORS = Object.fromEntries(
+  Object.entries(COLOR_PAIRS).map(([name, pair]) => [
+    name,
+    createThemeVariants(pair)
+  ])
+) as {
+  [K in keyof typeof COLOR_PAIRS]: {
+    dark: ReturnType<typeof createTheme>;
+    light: ReturnType<typeof createTheme>;
+  };
+};

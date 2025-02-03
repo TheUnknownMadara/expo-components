@@ -1,4 +1,5 @@
 import { View, ViewProps, ViewStyle } from 'react-native';
+import { Platform } from 'react-native';
 
 export type HeaderRootProps = ViewProps & {
   style?: ViewStyle
@@ -6,6 +7,7 @@ export type HeaderRootProps = ViewProps & {
 
 
 export default function HeaderRoot({ children, style }: HeaderRootProps) {
+  const isWeb = Platform.OS === 'web';
   return (
     <View
       style={{
@@ -14,8 +16,11 @@ export default function HeaderRoot({ children, style }: HeaderRootProps) {
         gap: 10,
         alignItems: 'center',
         flexDirection: 'row',
+        ...isWeb && {
+          display: 'none',
+        }
       }}
-      {...style as ViewStyle}
+      {...style as ViewStyle }
     >
       {children}
     </View>

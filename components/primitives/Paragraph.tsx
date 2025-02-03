@@ -1,17 +1,18 @@
 import React from 'react';
-import { Text, TextProps, useColorScheme } from 'react-native';
+import { Text, TextProps } from 'react-native';
 import { ParagraphStyle } from '@/theme/styles/components/primitives/Paragraph';
+import { useThemeStore } from '../../hooks/useThemesStore';
 
 export type ParagraphProps = TextProps;
 
 const Paragraph: React.FC<TextProps> = ({ children, ...props }) => {
-  const colorScheme = useColorScheme();
+  const { scheme, mode } = useThemeStore();
   return (
     <Text
       selectable={true}
       accessibilityRole="text"
       {...props}
-      style={ParagraphStyle(colorScheme, props.style)}
+      style={ParagraphStyle({scheme, mode}, props.style)}
     >
       {children}
     </Text>

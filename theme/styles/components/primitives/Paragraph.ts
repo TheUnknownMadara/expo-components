@@ -1,12 +1,14 @@
-import { ColorSchemeName, StyleProp, StyleSheet } from "react-native";
+import { StyleProp, StyleSheet } from "react-native";
 import { COLORS } from "@/theme/colors";
 import { SIZES } from "@/theme/sizes";
+import { ThemeContext } from "../../../../hooks/useThemesStore";
 
 
 export function ParagraphStyle(
-  theme: ColorSchemeName,
-  style : StyleProp<any> = {}
+  theme: ThemeContext,
+  style: StyleProp<any> = {}
 ) {
+  const colors = COLORS[theme.scheme][theme.mode];
   const _default : StyleProp<any> = {
     text: {
       fontFamily: 'CourierPrime_400Regular',
@@ -15,30 +17,11 @@ export function ParagraphStyle(
     },
   }
 
-  switch (theme) {
-    case 'dark':
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.dark.getText(),
-          ...style,
-        },
-      }).text;
-    case 'light':
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.light.getText(),
-          ...style,
-        },
-      }).text;
-    default:
-      return StyleSheet.create({
-        text: {
-          ..._default.text,
-          color: COLORS.dark.getText(),
-          ...style,
-        },
-      }).text;
-  }
+  return StyleSheet.create({
+    text: {
+      ..._default.text,
+      color: colors.getText(),
+      ...style,
+    },
+  }).text;
 }

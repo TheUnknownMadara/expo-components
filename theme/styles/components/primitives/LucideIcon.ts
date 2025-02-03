@@ -1,49 +1,21 @@
 import { MotiProps } from 'moti';
-import { ColorSchemeName } from 'react-native';
 import { COLORS } from '@/theme/colors';
+import { ThemeContext } from '../../../../hooks/useThemesStore';
 
-export default function icon(theme: ColorSchemeName): MotiProps {
-  switch (theme) {
-    case 'dark':
-      return {
-        animate: {
-          color: COLORS.dark.getText(),
-        },
-      };
-    case 'light':
-      return {
-        animate: {
-          color: COLORS.light.getText(),
-        },
-      };
-    default:
-      return {
-        animate: {
-          color: COLORS.dark.getText(),
-        },
-      };
-  }
+export default function icon(  theme: ThemeContext): MotiProps {
+  const colors = COLORS[theme.scheme][theme.mode];
+  return {
+    animate: {
+      color: colors.getText(),
+    },
+  };
 }
 
-export function ButtonIcon(theme: ColorSchemeName): MotiProps {
-  switch (theme) {
-    case 'dark':
-      return {
-        animate: {
-          color: COLORS.dark.background,
-        },
-      };
-    case 'light':
-      return {
-        animate: {
-          color: COLORS.light.background,
-        },
-      };
-    default:
-      return {
-        animate: {
-          color: COLORS.dark.background,
-        },
-      };
-  }
+export function ButtonIcon(theme: ThemeContext): MotiProps {
+  const colors = COLORS[theme.scheme][theme.mode];
+  return {
+    animate: {
+      color: colors.background,
+    },
+  };
 }

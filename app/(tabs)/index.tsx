@@ -13,11 +13,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function HomeScreen() {
   return (
-    <AppScreen style={{ justifyContent: 'space-between', paddingTop: 100 }}>
+    <AppScreen style={{ justifyContent: 'space-between', paddingTop: 100, flex: 1 }}>
       <View
         style={{
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           gap: SIZES.screens.gap,
         }}
       >

@@ -3,7 +3,7 @@ import { ColorSchemeName, TouchableOpacity } from 'react-native';
 import { MotiView } from 'moti';
 import LucideIcon, { IconNames } from '@/components/primitives/LucideIcon';
 import { BlurView } from '@react-native-community/blur';
-import { useColorScheme } from '@/hooks/useColorScheme.web';
+import { useColorScheme } from 'react-native';
 import {
   messageColor,
   container,
@@ -70,7 +70,7 @@ export const Toast = ({
       const timer = setTimeout(hideToast, duration);
       return () => clearTimeout(timer);
     }
-  }, [duration, hideToast]);
+  }, [duration, hideToast, permanent]);
 
   return (
     <MotiView

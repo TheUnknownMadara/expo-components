@@ -1,10 +1,13 @@
 import { AppScreenContainer } from '@/theme/styles/components/compositions/AppScreen';
-import { SafeAreaView } from 'moti';
-import { useColorScheme } from 'react-native';
-import { SafeAreaViewProps } from 'react-native-safe-area-context';
+import { ScrollView } from 'moti';
+import { ScrollViewProps } from 'react-native';
+import { useThemeStore } from '../../hooks/useThemesStore';
+import { COLORS } from '../../theme/colors';
+import { ThemeInitializer } from '../../hooks/useThemeInitializer';
+import { Platform } from 'react-native';
 
-export type AppScreenProps = React.PropsWithChildren<SafeAreaViewProps> & {
-  style?: SafeAreaViewProps['style'];
+export type AppScreenProps = React.PropsWithChildren<ScrollViewProps> & {
+  style?: ScrollViewProps['style'];
   padded?: boolean;
 };
 
@@ -16,13 +19,28 @@ export default function AppScreen(
     ...props
   }: AppScreenProps,
 ) {
-  const colorScheme = useColorScheme();
+  const { scheme, mode } = useThemeStore();
+  const themeColors = COLORS[scheme][mode];
+  const isWeb = Platform.OS === 'web';
+
   return (
-    <SafeAreaView
+    <ScrollView
       {...props}
-      style={AppScreenContainer(colorScheme, style, padded)}
+      scrollEnabled={true}
+      style={{ backgroundColor: themeColors.background }}
+      contentContainerStyle={[
+        AppScreenContainer({ scheme, mode }, style, padded),
+        { backgroundColor: themeColors.background },
+        isWeb ? {
+          maxWidth: '50%',
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 'auto',
+        } : {}
+      ]}
     >
+      <ThemeInitializer />
       {children}
-    </SafeAreaView>
+    </ScrollView>
   );
 }
